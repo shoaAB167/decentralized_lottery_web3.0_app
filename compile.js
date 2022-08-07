@@ -7,5 +7,6 @@ const solc = require('solc');
 const LotteryPath = path.resolve(__dirname,'contracts','Lottery.sol');
 const source = fs.readFileSync(LotteryPath, 'utf8');
 
-console.log(solc.compile(source,1).contracts[':lottery']);
-//module.exports = solc.compile(source,1).contracts[':Lottery'];
+//It export bytecode and ABI code which we can see using
+//console.log
+module.exports = solc.compile(source,1).contracts[':lottery'];
