@@ -11,7 +11,8 @@ class Lottery extends Component {
       manager : '',
       participate_amount : '0.00001',
       message : '',
-      total_amount : ''
+      total_amount : '',
+      message : ''
       //it help to give what happening with smart contract
    }
   }
@@ -28,14 +29,33 @@ class Lottery extends Component {
     const total_amount = await web3.eth.getBalance(lottery.options.address);
     this.setState({total_amount : total_amount});
   }
+
+  onSubmit = async (event) => {
+    event.preventDefault();//it allows browser not refresh or jump
+    const accounts = await web3.eth.getAccounts();
+
+    if(this.state.participate_amount < 0.000001){
+      return alert("Amount is less than 0.000001, Please enter bigger amount");
+    }
+
+    this.setState({message : 'Please wait ...'});
+    const enter_lottery = await lottery.methods.enterLottery().send({
+      from : accounts[0] ,//we select second account from metamask
+      value : web3.utils.toWei(this.state.participate_amount, 'ether')//convert ether to wei
+    });
+    this.setState({message: "You have been added to the Lottery!"});
+  }
+
   render(){
     return(
     <div>
-      <h1> Total lottery pool is {this.state.total_amount} </h1>
-      <form>
-        <input placeholder = "0.0001" />
-        <button type = "submit">Participate</button>
+      <h1> Total lottery pool is {web3.utils.fromWei(this.state.total_amount,'ether')} </h1>
+      <form onSubmit = {this.onSubmit}>
+      <input value = {this.state.participate_amount} onChange = {event => this.setState({
+      participate_amount : event.target.value})} />
+      <button type = "submit">Participate</button>
       </form>
+      <p>{this.state.message}</p>
       <hr/> <br/> <hr/>
       <p> The manager of the lottery decentralized app is {this.state.manager} </p>
       <button>Pick Winner</button>
