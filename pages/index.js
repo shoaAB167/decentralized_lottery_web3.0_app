@@ -10,7 +10,8 @@ class Lottery extends Component {
     this.state = {
       manager : '',
       participate_amount : '0.00001',
-      message : ''
+      message : '',
+      total_amount : ''
       //it help to give what happening with smart contract
    }
   }
@@ -22,12 +23,15 @@ class Lottery extends Component {
     //basically clicking manager button
     console.log(manager);
     this.setState({manager : manager});
-
+    //web3 connect with lottery app and get the balance of smart contract
+    //lottery.option.address is adress where contract is deployed (ABI code)
+    const total_amount = await web3.eth.getBalance(lottery.options.address);
+    this.setState({total_amount : total_amount});
   }
   render(){
     return(
     <div>
-      <h1> Total lottery pool is 1000 </h1>
+      <h1> Total lottery pool is {this.state.total_amount} </h1>
       <form>
         <input placeholder = "0.0001" />
         <button type = "submit">Participate</button>
