@@ -8,5 +8,4 @@ const LotteryPath = path.resolve(__dirname,'contracts','Lottery.sol');
 const source = fs.readFileSync(LotteryPath, 'utf8');
 
 //It export bytecode and ABI code which we can see using
-//console.log
 module.exports = solc.compile(source,1).contracts[':lottery'];
